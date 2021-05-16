@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Tilemaps;
 
-namespace RealmGames
+namespace RealmGames.PathFinding
 {
     public class PathNode
     {
@@ -55,6 +55,52 @@ namespace RealmGames
                 current = current.parent;
 
                 points.Insert(0, new Vector3(p.x, p.y, 0f));
+            }
+
+            return points.ToArray();
+        }
+
+        public Vector3[] GetPathPointsVec3(Grid grid)
+        {
+            List<Vector3> points = new List<Vector3>();
+
+            PathNode current = this;
+
+            Vector3Int cell = Vector3Int.zero;
+
+            while (current != null)
+            {
+                Vector2Int p = current.position;
+
+                cell.x = p.x;
+                cell.y = p.y;
+
+                current = current.parent;
+
+                points.Insert(0, grid.GetCellCenterWorld(cell));
+            }
+
+            return points.ToArray();
+        }
+
+        public Vector3[] GetPathPointsVec3(Tilemap tileMap)
+        {
+            List<Vector3> points = new List<Vector3>();
+
+            PathNode current = this;
+
+            Vector3Int cell = Vector3Int.zero;
+
+            while (current != null)
+            {
+                Vector2Int p = current.position;
+
+                cell.x = p.x;
+                cell.y = p.y;
+
+                current = current.parent;
+
+                points.Insert(0, tileMap.GetCellCenterWorld(cell));
             }
 
             return points.ToArray();
